@@ -1,3 +1,16 @@
+.main {
+  width: 800px;
+  margin: auto;
+  padding: 50px;
+}
+.main__info, .main__about, .main-interests, .main-facts {
+  margin-bottom: 25px;
+}
+@media screen and (max-width: 800px) {
+  .main {
+    width: 100%;
+  }
+}
 .main__info {
   display: flex;
   flex-direction: row;

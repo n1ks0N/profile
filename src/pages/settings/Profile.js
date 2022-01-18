@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import Input from '../../elements/Input'
 import { doc, setDoc, getFirestore } from "firebase/firestore"; 
 
-const Profile = ({ user }) => {
+const Profile = ({ user, userData }) => {
   const changeProfile = (e) => {
     e.preventDefault()
     const { name, surname, city, phone, mail } = e.target.elements
@@ -13,18 +13,17 @@ const Profile = ({ user }) => {
       phone: phone.value,
       mail: mail.value
     }, { merge: true });
-    
   }
   return (
     <div>
       <div>
         <form onSubmit={changeProfile}>
-          <Input type="text" placeholder="Иван" label="Имя" id="name" defaultValue={''} required={true} />
-          <Input type="text" placeholder="Иванов" label="Фамилия" id="surname" defaultValue={''} required={true} />
-          <Input type="text" placeholder="Москва" label="Город" id="city" defaultValue={''} required={true} />
-          <Input type="number" placeholder="8 999 999 99 99" label="Телефон" id="phone" defaultValue={''} required={true} />
-          <Input type="email" placeholder="example@gmail.com" label="Почта" id="mail" defaultValue={''} required={true} />
-          <button type='submit' className='btn btn-primary'>Сохранить</button>
+          <Input type="text" placeholder="Иван" label="Имя" id="name" defaultValue={userData.name} required={true} />
+          <Input type="text" placeholder="Иванов" label="Фамилия" id="surname" defaultValue={userData.surname} required={true} />
+          <Input type="text" placeholder="Москва" label="Город" id="city" defaultValue={userData.city} required={true} />
+          <Input type="number" placeholder="8 999 999 99 99" label="Телефон" id="phone" defaultValue={userData.phone} required={true} />
+          <Input type="email" placeholder="example@gmail.com" label="Почта" id="mail" defaultValue={userData.mail} required={true} />
+          <button type='submit' className='btn btn-app'>Сохранить</button>
         </form>
       </div>
     </div>

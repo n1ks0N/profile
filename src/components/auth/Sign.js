@@ -1,57 +1,75 @@
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithPhoneNumber } from 'firebase/auth';
 import { useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
-import { doc, setDoc, getFirestore } from "firebase/firestore"; 
+import { doc, setDoc, getFirestore } from "firebase/firestore";
+import Input from '../../elements/Input';
+import listIcon from '../../utils/img/list.svg'
+import fbIcon from '../../utils/img/fb.svg'
+import vkIcon from '../../utils/img/vk.svg'
+import googleIcon from '../../utils/img/google.svg'
+import okIcon from '../../utils/img/ok.svg'
 
-const Login = ({user, setUser}) => {
+const Login = ({ user, setUser }) => {
 	let navigate = useNavigate()
-	const inputLoginRef = useRef('')
-	const inputPassRef = useRef('')
-	const sign = () => {
-		createUserWithEmailAndPassword(getAuth(), inputLoginRef.current.value, inputPassRef.current.value)
-		.then((userCredential) => {
-			// Signed in 
-			const user = userCredential.user;
-            setDoc(doc(getFirestore(), "users", user.email), {
-                email: user.email
-            });
-			setUser(user)
-		})
-		.catch((error) => {
-			const errorCode = error.code;
-			const errorMessage = error.message;
-			console.log(errorCode, errorMessage)
-		});
+	const rootEl = useRef(null);
+	const sign = (e) => {
+		e.preventDefault()
+		const { login, pass } = e.target.elements
+		if (login.value.includes('@')) {
+			createUserWithEmailAndPassword(getAuth(), login.value, pass.value)
+				.then((userCredential) => {
+					// Signed in 
+					const user = userCredential.user;
+					setDoc(doc(getFirestore(), "users", user.email), {
+						email: user.email
+					});
+					setUser(user)
+					document.cookie += 'account=true'
+				})
+				.catch((error) => {
+					const errorCode = error.code;
+					const errorMessage = error.message;
+					console.log(errorCode, errorMessage)
+				});
+		} else {
+			
+		}
 	}
 	useEffect(() => {
 		if (user) {
 			navigate('/user/settings/profile')
 		}
 	}, [user])
-  return (
-    <div>
-			<h2>Регистрация</h2>
-			<div>
-				<label>Телефон или Email</label>
-				<input type='text' className='input' ref={inputLoginRef} />
+	useEffect(() => {
+		const onClick = e => rootEl.current.contains(e.target) || navigate('/');
+		document.addEventListener('click', onClick);
+		return () => document.removeEventListener('click', onClick);
+	}, []);
+	return (
+		<div className='modal-auth' ref={rootEl}>
+			<h2 className='modal-auth__title'><img src={listIcon} />&nbsp;Регистрация</h2>
+			<form onSubmit={sign}>
+				<Input type="text" placeholder="" label="Телефон или Email" id="login" defaultValue={''} required={true} />
+				<Input type="password" placeholder="" label="Пароль" id="pass" defaultValue={''} required={true} />
+				<button type='submit' className='btn btn-app'>Продолжить</button>
+			</form>
+			<div className='modal-auth__hr'>
+				<hr className='separator' />
+				<p className='modal-auth__separator-text'>Или</p>
+				<hr className='separator' />
 			</div>
-			<div>
-				<label>Пароль</label>
-				<input type='password' className='input' ref={inputPassRef} />
+			<div className='modal-auth__btn-wrapper'>
+				<button type='button' className='btn modal-auth__btn'><img src={fbIcon} /></button>
+				<button type='button' className='btn modal-auth__btn'><img src={vkIcon} /></button>
+				<button type='button' className='btn modal-auth__btn'><img src={okIcon} /></button>
+				<button type='button' className='btn modal-auth__btn'><img src={googleIcon} /></button>
 			</div>
-			<button type='button' className='btn' onClick={() => sign()}>Продолжить</button>
-			<hr />
-			<div>
-			<button type='button' className='btn'>FB</button>
-			<button type='button' className='btn'>VK</button>
-			<button type='button' className='btn'>OK</button>
-			<button type='button' className='btn'>Google</button>
+			<p className='modal-auth__text'>Авторизуясь на сайте, вы принимаете условия<br /><Link to="/privacy">пользовательского соглашения</Link></p>
+			<div className='modal-auth__extra-wrapper'><h5>Уже есть аккаунт?</h5>
+				<Link to="/login"><button type='button' className='btn btn-primary btn-width'>Войти</button></Link>
 			</div>
-			<p>Авторизуясь на сайте, вы принимаете условия <Link to="/privacy">пользовательского соглашения</Link></p>
-			<p>Уже есть аккаунт?</p>
-			<Link to="/login"><button type='button' className='btn'>Войти</button></Link>
-    </div>
-  );
+		</div>
+	);
 };
 
 export default Login

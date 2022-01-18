@@ -1,4 +1,3 @@
-import { fb } from '../utils/constants/firebase'
 import avatarIcon from '../utils/img/avatar.svg'
 import profileIcon from '../utils/img/profile.svg'
 import locationIcon from '../utils/img/location.svg'
@@ -37,7 +36,7 @@ const Main = () => {
                     </div>
                 </div>
             </div>
-            <div>
+            <div className='main-facts'>
                 <h2>Любопытные факты</h2>
                 <div className='main-facts__wrapper'>
                     <div className='main-facts__item'>

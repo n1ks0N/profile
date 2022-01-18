@@ -1,0 +1,12 @@
+.btn-user {
+  background: #ECE5FF;
+  border-radius: 8px;
+  color: #5B2AE7;
+  width: 343px;
+  height: 48px;
+  margin: auto;
+}
+.btn-logout {
+  color: #E72A72;
+  margin: auto;
+}

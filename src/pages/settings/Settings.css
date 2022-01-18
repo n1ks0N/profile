@@ -1,0 +1,17 @@
+.settings {
+  padding: 0 150px;
+}
+.settings__item {
+  position: relative;
+  margin: 25px;
+  cursor: pointer;
+}
+.settings__item::after {
+  position: absolute;
+  content: url('../../utils/img/right.svg');
+  width: 20px;
+  height: 20px;
+  right: 0;
+  top: 50%;
+  transform: (-50%, -50%);
+}

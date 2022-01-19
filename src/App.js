@@ -13,6 +13,9 @@ import { onSnapshot, doc, getFirestore } from 'firebase/firestore';
 import { fb } from './utils/constants/firebase';
 import './App.css';
 import './components/auth/Auth.css'
+import About from './pages/settings/About';
+import Facts from './pages/settings/Facts';
+import Interests from './pages/settings/Interests';
 
 const App = () => {
   // Main data about user for login or logout status
@@ -76,7 +79,10 @@ const App = () => {
         </Routes>
         <Routes>
           <Route exact path="/user/settings/profile" element={<Profile user={user} userData={userData} />} />
-          <Route exact path="/user/settings" element={<Settings user={user} userData={userData} />} />
+          <Route exact path="/user/settings/about" element={<About user={user} userData={userData} />} />
+          <Route exact path="/user/settings/facts" element={<Facts user={user} userData={userData} />} />
+          <Route exact path="/user/settings/interests" element={<Interests user={user} userData={userData} />} />
+          <Route exact path="/user/settings/*" element={<Settings user={user} userData={userData} />} />
           <Route path="/user/*" element={<User user={user} setUser={setUser} userData={userData} />} />
           <Route path="*" element={<Main />} />
           {/* <Route path="*" element={<h1>404</h1>} /> */}

@@ -19,8 +19,13 @@
   flex-wrap: wrap;
 }
 
-.main__info__text {
+.main__info__text-wrapper {
   margin-left: 15px;
+}
+.main__info__location {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .main-interests__wrapper {

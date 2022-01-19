@@ -8,11 +8,11 @@ const Main = () => {
         <div className="main">
             <div className="main__info">
                 <div>
-                    <img src={avatarIcon} />
+                    <img src={avatarIcon} alt='Avatar' />
                 </div>
-                <div className='main__info__text'>
+                <div className='main__info__text-wrapper'>
                     <h3>Виктор Иванов</h3>
-                    <p><img src={locationIcon} />Екатеринбург</p>
+                    <p className='main__info__location'><img src={locationIcon} alt="Location" />&nbsp;Екатеринбург</p>
                 </div>
             </div>
             <div className="main__about">

@@ -36,9 +36,9 @@ const User = ({ user, setUser, userData }) => {
                 <div>
                   <img src={avatarIcon} />
                 </div>
-                <div className='main__info__text'>
+                <div className='main__info__text-wrapper'>
                   <h3>{userData.name} {userData.surname}</h3>
-                  <p><img src={locationIcon} />{userData.city}</p>
+                  <p className='main__info__location'><img src={locationIcon} />&nbsp;{userData.city}</p>
                 </div>
               </div>
               <div className='width-100'>
@@ -53,7 +53,11 @@ const User = ({ user, setUser, userData }) => {
               </div>
               <div className="main-interests">
                 <h2>Интересы</h2>
-
+                <div className="main-interests__wrapper">
+                  {userData?.interests !== undefined && userData?.interests.length > 0 ? userData.interests.map((item, i) => <div className="main-interests__item" key={i}>
+                    <p className="main-interests__text">{item.label}</p>
+                  </div>) : <p>Интересов нет :(</p>}  
+                </div>
               </div>
               <div>
                 <h2>Любопытные факты</h2>

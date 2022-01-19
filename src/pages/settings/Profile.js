@@ -1,21 +1,24 @@
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom';
 import Input from '../../elements/Input'
 import { doc, setDoc, getFirestore } from "firebase/firestore"; 
+import SettingsHeader from '../../components/settings/SettingsHeder';
 
 const Profile = ({ user, userData }) => {
   const changeProfile = (e) => {
     e.preventDefault()
     const { name, surname, city, phone, mail } = e.target.elements
     setDoc(doc(getFirestore(), "users", user.email), {
-      name: name.value,
-      surname: surname.value, 
-      city: city.value, 
-      phone: phone.value,
-      mail: mail.value
+      name: name.value.trim().split('').map((letter, i) => i === 0 ? letter.toUpperCase() : letter).join(''),
+      surname: surname.value.trim().split('').map((letter, i) => i === 0 ? letter.toUpperCase() : letter).join(''), 
+      city: city.value.trim().split('').map((letter, i) => i === 0 ? letter.toUpperCase() : letter).join(''), 
+      phone: phone.value.trim(),
+      mail: mail.value.trim()
     }, { merge: true });
   }
   return (
-    <div>
+    <div className='settings-wrap'>
+      <SettingsHeader title="Личные данные" />
       <div>
         <form onSubmit={changeProfile}>
           <Input type="text" placeholder="Иван" label="Имя" id="name" defaultValue={userData.name} required={true} />

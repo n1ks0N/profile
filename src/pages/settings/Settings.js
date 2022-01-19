@@ -15,9 +15,9 @@ const Settings = ({ user, userData }) => {
         <div>
           <img src={avatarIcon} />
         </div>
-        <div className='main__info__text'>
+        <div className='main__info__text-wrapper'>
           <h3>{userData.name} {userData.surname}</h3>
-          <p><img src={locationIcon} />{userData.city}</p>
+          <p className='main__info__location'><img src={locationIcon} />&nbsp;{userData.city}</p>
         </div>
       </div>
       <div>

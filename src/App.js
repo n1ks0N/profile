@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Link, Routes, useNavigate } from 'react-router-dom'
 import Main from './pages/Main'
 import Login from './components/auth/Login';
@@ -8,6 +8,7 @@ import Profile from './pages/settings/Profile'
 import Settings from './pages/settings/Settings';
 import profileIcon from './utils/img/profile.svg'
 import logoImage from './utils/img/logo.svg'
+import avatarImage from './utils/img/avatar.svg'
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { onSnapshot, doc, getFirestore } from 'firebase/firestore';
 import { fb } from './utils/constants/firebase';
@@ -16,6 +17,7 @@ import './components/auth/Auth.css'
 import About from './pages/settings/About';
 import Facts from './pages/settings/Facts';
 import Interests from './pages/settings/Interests';
+import Loader from './components/loader/Loader'
 
 const App = () => {
   // Main data about user for login or logout status
@@ -23,8 +25,8 @@ const App = () => {
   // If false then redirect on Main page
   // If user data then give allow to User page
   const [user, setUser] = useState('loading')
-  
-  const [userData, setUserData] = useState([])
+
+  const [userData, setUserData] = useState('loading')
 
   const [loginModal, setLoginModal] = useState(false)
 
@@ -60,7 +62,6 @@ const App = () => {
       navigate('/sign')
     }
   }
-  console.log(user, userData, document.cookie)
   return (
     <div className="app">
       <header className="header">
@@ -68,25 +69,37 @@ const App = () => {
 
         </div>
         <div>
-          <Link to="/"><img src={logoImage} /></Link>
+            <Link to="/"><img src={logoImage} /></Link>
         </div>
-        <button type='button' className='btn btn-link' onClick={openAuthModal}><img src={profileIcon} /></button>
+        <button type='button' className='btn btn-link' onClick={openAuthModal}>
+          {user !== 'loading' && userData !== 'loading' ?
+            <img src={avatarImage} className='header__avatar' />
+            : 
+            <img src={profileIcon} />
+          }
+        </button>
       </header>
       <main>
-      <Routes>
+        <Routes>
           <Route path="/login" element={<Login user={user} setUser={setUser} />} />
           <Route path="/sign" element={<Sign user={user} setUser={setUser} />} />
         </Routes>
-        <Routes>
-          <Route exact path="/user/settings/profile" element={<Profile user={user} userData={userData} />} />
-          <Route exact path="/user/settings/about" element={<About user={user} userData={userData} />} />
-          <Route exact path="/user/settings/facts" element={<Facts user={user} userData={userData} />} />
-          <Route exact path="/user/settings/interests" element={<Interests user={user} userData={userData} />} />
-          <Route exact path="/user/settings/*" element={<Settings user={user} userData={userData} />} />
-          <Route path="/user/*" element={<User user={user} setUser={setUser} userData={userData} />} />
-          <Route path="*" element={<Main />} />
-          {/* <Route path="*" element={<h1>404</h1>} /> */}
-        </Routes>
+        {user !== 'loading' && userData !== 'loading' ?
+          <Routes>
+            <Route exact path="/user/settings/profile" element={<Profile user={user} userData={userData} />} />
+            <Route exact path="/user/settings/about" element={<About user={user} userData={userData} />} />
+            <Route exact path="/user/settings/facts" element={<Facts user={user} userData={userData} />} />
+            <Route exact path="/user/settings/interests" element={<Interests user={user} userData={userData} />} />
+            <Route exact path="/user/settings/*" element={<Settings user={user} userData={userData} />} />
+            <Route path="/user/*" element={<User user={user} setUser={setUser} userData={userData} />} />
+            <Route path="*" element={<Main />} />
+          </Routes>
+          :
+          <>
+            <Loader />
+          </>
+        }
+        {/* <Route path="*" element={<h1>404</h1>} /> */}
       </main>
       <footer>
 

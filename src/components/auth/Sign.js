@@ -21,7 +21,14 @@ const Login = ({ user, setUser }) => {
 					// Signed in 
 					const user = userCredential.user;
 					setDoc(doc(getFirestore(), "users", user.email), {
-						email: user.email
+						mail: user.email,
+						name: '',
+						surname: '',
+						city: '',
+						phone: '',
+						interests: [],
+						about: '',
+						videos: []
 					});
 					setUser(user)
 					document.cookie += 'account=true'

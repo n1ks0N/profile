@@ -1,6 +1,7 @@
 * {
   font-family: 'Roboto', sans-serif;
 }
+
 p {
   margin: 0;
 }
@@ -13,32 +14,32 @@ header {
   height: 60px;
 }
 
+.header__avatar {
+  width: 40px;
+  height: 40px;
+}
+
 .btn-app {
   background: #5B2AE7;
-border-radius: 8px;
-padding: 12px;
-color: #FFFFFF;
-font-weight: 500;
-font-size: 16px;
-line-height: 24px;
-width: 100%;
-transition: all .5s ease-in-out;
+  border-radius: 8px;
+  padding: 12px;
+  color: #FFFFFF;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  width: 100%;
+  transition: all .5s ease-in-out;
 }
+
 .btn-app:hover {
   color: #fff;
   background: #551df0;
 }
+
 .btn-width {
   width: 100% !important;
 }
-.loader{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-}
+
 .width-100 {
   width: 100%;
   text-align: center;

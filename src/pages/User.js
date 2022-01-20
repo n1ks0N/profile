@@ -48,7 +48,7 @@ const User = ({ user, setUser, userData }) => {
                 <h2>О себе</h2>
                 <p>{userData.about}</p>
                 <div>
-
+                  {userData.videos.map((item, i) => <iframe key={i} width="160px" height="100px" src={item} title="Video player" frameBorder="0" allow="" allowFullScreen />)}
                 </div>
               </div>
               <div className="main-interests">

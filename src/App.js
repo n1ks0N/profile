@@ -95,9 +95,10 @@ const App = () => {
             <Route path="*" element={<Main />} />
           </Routes>
           :
-          <>
-            <Loader />
-          </>
+          <Routes>
+            <Route path="*" element={<Main />} />
+            {/* <Loader /> */}
+          </Routes>
         }
         {/* <Route path="*" element={<h1>404</h1>} /> */}
       </main>

@@ -40,6 +40,7 @@ const App = () => {
         setUser(user)
       } else {
         setUser(false)
+        setUserData(false)
         if (document.cookie.includes('account=true')) {
           setLoginModal(true)
         }
@@ -72,7 +73,7 @@ const App = () => {
             <Link to="/"><img src={logoImage} /></Link>
         </div>
         <button type='button' className='btn btn-link' onClick={openAuthModal}>
-          {user !== 'loading' && userData !== 'loading' ?
+          {user !== 'loading' && userData !== 'loading' && user && userData ?
             <img src={avatarImage} className='header__avatar' />
             : 
             <img src={profileIcon} />
@@ -95,10 +96,7 @@ const App = () => {
             <Route path="*" element={<Main />} />
           </Routes>
           :
-          <Routes>
-            <Route path="*" element={<Main />} />
-            {/* <Loader /> */}
-          </Routes>
+            <Loader />
         }
         {/* <Route path="*" element={<h1>404</h1>} /> */}
       </main>

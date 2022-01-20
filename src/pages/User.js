@@ -6,6 +6,7 @@ import locationIcon from '../utils/img/location.svg'
 import './User.css'
 
 const User = ({ user, setUser, userData }) => {
+  console.log(user, userData)
   let navigate = useNavigate()
   const logout = () => {
     signOut(getAuth()).then(() => {
@@ -23,7 +24,7 @@ const User = ({ user, setUser, userData }) => {
   return (
     <div>
       {
-        user === 'loading' ?
+        user === 'loading' || userData === 'loading' || !user || !userData ?
           <div className='loader'>
             <div className="spinner-border text-primary" role="status">
               <span className="visually-hidden">Loading...</span>

@@ -1,21 +1,71 @@
-import { Link } from "react-router-dom"
+import { useState, useEffect, useLayoutEffect } from "react"
+import { Link, useLocation, useSearchParams } from "react-router-dom"
+import { onSnapshot, doc, getFirestore, setDoc, getDoc } from "firebase/firestore"
 import SettingsHeader from "../../components/settings/SettingsHeder"
 import Select from "react-select"
 import Input from "../../elements/Input"
 import Textarea from '../../elements/Textarea'
-import { useState } from "react"
+import { fb } from "../../utils/constants/firebase"
 
 const Facts = ({ user, userData }) => {
   const [options, setOptions] = useState([])
-  const chooseItems = (items) => {
-
+  const [resultItem, setResultItem] = useState(false)
+  const [defaultText, setDefaultText] = useState(false)
+  let [searchParams, setSearchParams] = useSearchParams();
+  let location = useLocation()
+  useLayoutEffect(() => {
+    const paths = location.pathname.split('/')
+    const lastPath = paths.pop()
+    if (lastPath !== 'facts') {
+      getDoc(doc(getFirestore(), "users", user.email)).then(docSnap => {
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+          const item = docSnap.data()?.facts.find(item => item.value === lastPath)
+          setResultItem(item)
+          setDefaultText(item.text)
+          console.log(item)
+        } else {
+          console.log("No such document!");
+        }
+      })
+    }
+  }, [])
+  useEffect(() => {
+    const unsub = onSnapshot(doc(getFirestore(), "data", 'user'), (doc) => {
+      const factsArray = doc.data()?.facts
+      setOptions(factsArray)
+    });
+  }, [])
+  const chooseItem = (item) => {
+    setResultItem(item)
+    console.log(item)
+  }
+  const changeFacts = (e) => {
+    e.preventDefault()
+    const { text, link } = e.target.elements
+    if (resultItem && text.value.trim().length > 0) {
+      const newFact = {
+        ...resultItem,
+        text: text.value.trim(),
+        link: link.value.trim(),
+        stage: userData?.facts.length
+      }
+      setDoc(doc(getFirestore(), "users", user.email), {
+        facts: userData?.facts.concat(newFact)
+      }, { merge: true }
+      )
+    }
   }
   return (
     <div className="settings-wrap">
       <SettingsHeader title="Факты" />
-      <Select options={options} placeholder="Выберите" className="settings-interests__select" onChange={(items) => chooseItems(items)} />
-      <Textarea placeholder="Введите текст" label="Пояснение" id="text" defaultValue={''} required={true} />
-      <Input type="url" placeholder="https://example.com/" label="Ссылка на дополнительные материалы" id="link" defaultValue={''} required={false} />
+      <form onSubmit={changeFacts}>
+        <p>Факт о вас</p>
+        <Select options={options} placeholder="Выберите" className="settings-interests__select" onChange={(item) => chooseItem(item)} />
+        <Textarea placeholder="Введите текст" label="Пояснение" id="text" defaultValue={defaultText || ''} required={true} />
+        <Input type="url" placeholder="https://example.com/" label="Ссылка на дополнительные материалы" id="link" defaultValue={''} required={false} />
+        <button type="submit" className="btn btn-app settings-interests__btn">Сохранить</button>
+      </form>
     </div>
   )
 }

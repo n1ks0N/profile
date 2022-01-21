@@ -8,8 +8,8 @@ const Interests = ({ user, userData }) => {
   const [resultItems, setResultItems] = useState(userData?.interests)
   useEffect(() => {
     const unsub = onSnapshot(doc(getFirestore(), "data", 'user'), (doc) => {
-      const arrInterests = doc.data()?.interests
-      setOptions(arrInterests)
+      const interestsArray = doc.data()?.interests
+      setOptions(interestsArray)
     });
   }, [])
   const chooseItems = (items) => {
@@ -27,7 +27,8 @@ const Interests = ({ user, userData }) => {
       <SettingsHeader title="Интересы" />
       <div>
         <form onSubmit={changeInterests}>
-          <Select options={options} isMulti placeholder="Выберите" className="settings-interests__select" onChange={(items) => chooseItems(items)} />
+          <p>Интересы</p>
+          <Select options={options} isMulti placeholder="Выберите свои увлечения" className="settings-interests__select" onChange={(items) => chooseItems(items)} />
           <button type="submit" className="btn btn-app settings-interests__btn">Сохранить</button>
         </form>
       </div>

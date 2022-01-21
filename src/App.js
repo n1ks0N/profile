@@ -58,6 +58,7 @@ const App = () => {
     if (user) {
       navigate('/user')
     } else if (loginModal) {
+      console.log(loginModal)
       navigate('/login')
     } else {
       navigate('/sign')
@@ -87,10 +88,10 @@ const App = () => {
         </Routes>
         {user !== 'loading' && userData !== 'loading' ?
           <Routes>
-            <Route exact path="/user/settings/profile" element={<Profile user={user} userData={userData} />} />
-            <Route exact path="/user/settings/about" element={<About user={user} userData={userData} />} />
-            <Route exact path="/user/settings/facts" element={<Facts user={user} userData={userData} />} />
-            <Route exact path="/user/settings/interests" element={<Interests user={user} userData={userData} />} />
+            <Route exact path="/user/settings/profile/*" element={<Profile user={user} userData={userData} />} />
+            <Route exact path="/user/settings/about/*" element={<About user={user} userData={userData} />} />
+            <Route exact path="/user/settings/facts/*" element={<Facts user={user} userData={userData} />} />
+            <Route exact path="/user/settings/interests/*" element={<Interests user={user} userData={userData} />} />
             <Route exact path="/user/settings/*" element={<Settings user={user} userData={userData} />} />
             <Route path="/user/*" element={<User user={user} setUser={setUser} userData={userData} />} />
             <Route path="*" element={<Main />} />

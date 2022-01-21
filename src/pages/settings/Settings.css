@@ -48,3 +48,9 @@
 .avatar-wrap:hover .avatar-wrap__bg {
   opacity: 1;
 }
+.settings__item_none-cursor {
+  cursor: initial;
+}
+.settings__item_none-cursor::after {
+  display: none;
+}

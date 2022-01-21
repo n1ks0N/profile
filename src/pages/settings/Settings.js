@@ -29,17 +29,17 @@ const Settings = ({ user, userData }) => {
           <input type="file" accept='image/*' name="img" id="upload" style={{ display: 'none' }} onChange={fileReader} />
         </div>
         <div className='main__info__text-wrapper'>
-          <h3>{userData.name} {userData.surname}</h3>
-          <p className='main__info__location'><img src={locationIcon} />&nbsp;{userData.city}</p>
+          <h3>{userData?.name} {userData?.surname}</h3>
+          <p className='main__info__location'><img src={locationIcon} />&nbsp;{userData?.city}</p>
         </div>
       </div>
       <div>
         <div className='settings__item' onClick={() => navigateTo('profile')}>
           <h4>Личные данные</h4>
-          <p>{userData.name} {userData.surname}</p>
-          <p>{userData.city}</p>
-          <p>{userData.phone}</p>
-          <p>{userData.mail}</p>
+          <p>{userData?.name} {userData?.surname}</p>
+          <p>{userData?.city}</p>
+          <p>{userData?.phone}</p>
+          <p>{userData?.mail}</p>
         </div>
         <div className='settings__item' onClick={() => navigateTo('about')}>
           <h4>О себе</h4>
@@ -52,9 +52,15 @@ const Settings = ({ user, userData }) => {
           <h4>Интересы</h4>
           <p>{userData?.interests.map((item) => item.label).join(', ')}</p>
         </div>
-        <div className='settings__item' onClick={() => navigateTo('facts')}>
+        <div className='settings__item settings__item_none-cursor'>
           <h4>Факты</h4>
-          <Link to="/facts"><button type="button" className="btn btn-link btn-add"><img src={plusIcon} />Добавить факт</button></Link>
+          {userData?.facts.map((item, i) => 
+            <div className='settings__item' onClick={() => navigateTo(`facts/${item.value}`)} key={i}>
+              <h6>{item.label}</h6>
+              <p>{item.text}</p>
+            </div>
+          )}
+          <Link to="/user/settings/facts"><button type="button" className="btn btn-link btn-add"><img src={plusIcon} />Добавить факт</button></Link>
         </div>
       </div>
     </div>

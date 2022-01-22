@@ -5,6 +5,18 @@ import avatarIcon from '../utils/img/avatar.svg'
 import locationIcon from '../utils/img/location.svg'
 import './User.css'
 
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/free-mode"
+import "swiper/css/pagination"
+
+import SwiperCore, {
+  FreeMode, Pagination
+} from 'swiper';
+SwiperCore.use([FreeMode, Pagination]);
+
 const User = ({ user, setUser, userData }) => {
   console.log(user, userData)
   let navigate = useNavigate()
@@ -38,7 +50,7 @@ const User = ({ user, setUser, userData }) => {
                   <img src={avatarIcon} />
                 </div>
                 <div className='main__info__text-wrapper'>
-                  <h3>{userData.name} {userData.surname}</h3>
+                  <h3 className='main__info__name'>{userData.name} {userData.surname}</h3>
                   <p className='main__info__location'><img src={locationIcon} />&nbsp;{userData.city}</p>
                 </div>
               </div>
@@ -54,16 +66,32 @@ const User = ({ user, setUser, userData }) => {
               </div>
               <div className="main-interests">
                 <h2>Интересы</h2>
-                <div className="main-interests__wrapper">
-                  {userData?.interests !== undefined && userData?.interests.length > 0 ? userData.interests.map((item, i) => <div className="main-interests__item" key={i}>
-                    <p className="main-interests__text">{item.label}</p>
-                  </div>) : <p>Интересов нет :(</p>}  
-                </div>
+                <Swiper slidesPerView={'auto'} spaceBetween={20} freeMode={true} className="mySwiper">
+                  {userData?.interests !== undefined && userData?.interests.length > 0 ? userData.interests.map((item, i) =>
+                    <SwiperSlide>
+                      <div className="main-interests__item" key={i}>
+                        <p className="main-interests__text">{item.label}</p>
+                      </div>
+                    </SwiperSlide>)
+                    :
+                    <SwiperSlide><p>Интересов нет :(</p></SwiperSlide>}
+                </Swiper>
               </div>
               <div>
                 <h2>Любопытные факты</h2>
                 <div className='main-facts__wrapper'>
-
+                  <Swiper slidesPerView={'auto'} spaceBetween={20} freeMode={true} className="mySwiper">
+                    {userData?.facts !== undefined && userData?.facts.length > 0 ? userData.facts.map((item, i) =>
+                      <SwiperSlide>
+                        <div className="main-facts__item" key={i}>
+                          <h5 className='main-facts__title'>{item.label}</h5>
+                          <p className='main-facts__text'>{item.text}</p>
+                          <button type="button" className="btn btn-link main-facts__btn">{item.link}</button>
+                        </div>
+                      </SwiperSlide>)
+                      :
+                      <SwiperSlide><p>Фактов нет :(</p></SwiperSlide>}
+                  </Swiper>
                 </div>
               </div>
             </div>

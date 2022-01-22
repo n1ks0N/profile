@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { getFirestore } from "firebase/firestore"
 import { setDoc, doc } from "firebase/firestore"
 import SettingsHeader from "../../components/settings/SettingsHeder"
@@ -8,6 +8,7 @@ import Input from "../../elements/Input"
 import plusIcon from '../../utils/img/plus.svg'
 
 const About = ({ user, userData }) => {
+  let navigate = useNavigate()
   const videosArray = userData?.videos.map((item, i) => ({ defaultValue: item, id: i }))
   const [inputsArray, setInputsArray] = useState(videosArray.length > 0 ? videosArray : [{ defaultValue: '', id: 0 }])
   const addInput = () => {
@@ -27,7 +28,7 @@ const About = ({ user, userData }) => {
       about: about.value.trim(),
       videos: fieldsArray
     }, { merge: true }
-    )
+    ).then(() => navigate('/user/settings'))
   }
   return (
     <div className="settings-wrap">

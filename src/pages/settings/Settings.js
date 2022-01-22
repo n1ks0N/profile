@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 import avatarIcon from '../../utils/img/avatar.svg'
 import profileIcon from '../../utils/img/profile.svg'
 import locationIcon from '../../utils/img/location.svg'
@@ -16,6 +17,17 @@ const Settings = ({ user, userData }) => {
   }
   const fileReader = (e) => {
     console.log(e.target.files[0])
+    let reader = new FileReader();
+    const file = e.target.files[0]
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const storage = getStorage();
+      const avatarRef = ref(storage, `avatars/${user.email}.${file.name.split('.').pop()}`);
+      uploadBytes(avatarRef, reader.result).then((snapshot) => {
+        console.log('Uploaded a blob or file!');
+      });
+
+    };
   }
   return (
     <div className='settings'>
@@ -45,7 +57,7 @@ const Settings = ({ user, userData }) => {
           <h4>О себе</h4>
           <p>{userData.about}</p>
           {userData?.videos.length > 0 &&
-          <p><img />&nbsp;Добавлено {userData?.videos.length} видео</p>
+            <p><img />&nbsp;Добавлено {userData?.videos.length} видео</p>
           }
         </div>
         <div className='settings__item' onClick={() => navigateTo('interests')}>
@@ -54,7 +66,7 @@ const Settings = ({ user, userData }) => {
         </div>
         <div className='settings__item settings__item_none-cursor'>
           <h4>Факты</h4>
-          {userData?.facts.map((item, i) => 
+          {userData?.facts.map((item, i) =>
             <div className='settings__item' onClick={() => navigateTo(`facts/${item.value}`)} key={i}>
               <h6>{item.label}</h6>
               <p>{item.text}</p>

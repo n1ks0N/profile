@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { doc, onSnapshot, getFirestore, setDoc } from "firebase/firestore";
 import Select from 'react-select'
 import SettingsHeader from "../../components/settings/SettingsHeder"
+import { useNavigate } from "react-router-dom";
 
 const Interests = ({ user, userData }) => {
   const [options, setOptions] = useState([])
   const [resultItems, setResultItems] = useState(userData?.interests)
+  let navigate = useNavigate()
   useEffect(() => {
     const unsub = onSnapshot(doc(getFirestore(), "data", 'user'), (doc) => {
       const interestsArray = doc.data()?.interests
@@ -20,7 +22,7 @@ const Interests = ({ user, userData }) => {
     setDoc(doc(getFirestore(), "users", user.email), {
       interests: resultItems
     }, { merge: true }
-    )
+    ).then(() => navigate('/user/settings'))
   }
   return (
     <div className="settings-wrap">

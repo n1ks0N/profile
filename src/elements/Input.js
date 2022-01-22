@@ -1,8 +1,11 @@
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 
 const Input = ({ label, id, placeholder, type, defaultValue, required }) => {
   const [value, setValue] = useState(defaultValue || '')
   const inputRef = useRef(defaultValue || '')
+  useEffect(() => {
+    setValue(defaultValue)
+  }, [defaultValue])
   const change = () => {
     setValue(inputRef.current.value)
   }

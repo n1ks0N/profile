@@ -1,10 +1,11 @@
 import { useEffect } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Input from '../../elements/Input'
 import { doc, setDoc, getFirestore } from "firebase/firestore"; 
 import SettingsHeader from '../../components/settings/SettingsHeder';
 
 const Profile = ({ user, userData }) => {
+  let navigate = useNavigate()
   const changeProfile = (e) => {
     e.preventDefault()
     const { name, surname, city, phone, mail } = e.target.elements
@@ -14,7 +15,8 @@ const Profile = ({ user, userData }) => {
       city: city.value.trim().split('').map((letter, i) => i === 0 ? letter.toUpperCase() : letter).join(''), 
       phone: phone.value.trim(),
       mail: mail.value.trim()
-    }, { merge: true });
+    }, { merge: true }).then(() => navigate('/user/settings'));
+
   }
   return (
     <div className='settings-wrap'>

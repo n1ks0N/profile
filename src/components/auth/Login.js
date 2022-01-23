@@ -40,11 +40,11 @@ const Login = ({ user, setUser }) => {
 			});
 		}
 	}
-	useLayoutEffect(() => {
-		if (user) {
-			navigate('/user')
-		}
-	}, [user])
+	// useLayoutEffect(() => {
+	// 	if (user) {
+	// 		navigate('/user')
+	// 	}
+	// }, [user])
 	useEffect(() => {
 		const onClick = e => rootEl.current.contains(e.target) || navigate('/');
 		document.addEventListener('click', onClick);

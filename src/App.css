@@ -20,6 +20,7 @@ header {
   align-items: center;
   height: 60px;
   border-bottom: 1px solid #DEDEDE;
+  margin-bottom: 25px;
 }
 
 .header__avatar {
@@ -45,7 +46,7 @@ header {
 }
 
 .btn-width {
-  width: 100% !important;
+  width: 95vw;
 }
 
 .width-100 {

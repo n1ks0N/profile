@@ -6,6 +6,9 @@
 .main__info, .main__about, .main-interests, .main-facts {
   margin-bottom: 25px;
 }
+.main__about {
+  margin-top: 25px;
+}
 .main__info {
   display: flex;
   flex-direction: row;

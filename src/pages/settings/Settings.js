@@ -1,3 +1,4 @@
+import { useLayoutEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import avatarIcon from '../../utils/img/avatar.svg'
@@ -26,11 +27,17 @@ const Settings = ({ user, userData }) => {
       uploadBytes(avatarRef, reader.result).then((snapshot) => {
         console.log('Uploaded a blob or file!');
       });
-
     };
   }
+  useLayoutEffect(() => {
+    if (!user) {
+      // navigate('/login')
+      window.location = '/login'
+    }
+  }, [user])
   return (
     <div className='settings'>
+      {user && <>
       <div className="main__info">
         <div className='avatar-wrap' onClick={changeAvatar}>
           <div className='avatar-wrap__bg'>
@@ -75,6 +82,8 @@ const Settings = ({ user, userData }) => {
           <Link to="/user/settings/facts"><button type="button" className="btn btn-link btn-add"><img src={plusIcon} />Добавить факт</button></Link>
         </div>
       </div>
+      </>
+    }
     </div>
   )
 }

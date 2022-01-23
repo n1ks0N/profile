@@ -1,6 +1,7 @@
+import { useLayoutEffect, useState } from 'react';
 import { getAuth, signOut } from 'firebase/auth';
-import { useNavigate, Link } from 'react-router-dom'
-import { useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom'
+import { collection, getDocs, getFirestore } from 'firebase/firestore';
 import avatarIcon from '../utils/img/avatar.svg'
 import locationIcon from '../utils/img/location.svg'
 import './User.css'
@@ -17,9 +18,10 @@ import SwiperCore, {
 } from 'swiper';
 SwiperCore.use([FreeMode, Pagination]);
 
-const User = ({ user, setUser, userData }) => {
-  console.log(user, userData)
+const User = ({ user, setUser }) => {
+  const [userData, setUserData] = useState(false)
   let navigate = useNavigate()
+  let location = useLocation()
   const logout = () => {
     signOut(getAuth()).then(() => {
       setUser(false)
@@ -28,15 +30,37 @@ const User = ({ user, setUser, userData }) => {
       console.log(error)
     });
   }
-  useEffect(() => {
-    if (!user) {
-      navigate('/login')
+  useLayoutEffect(() => {
+    const paths = location.pathname.split('/')
+    const lastPath = paths.pop()
+    if (lastPath !== 'user' && !paths.includes('/settings')) {
+      getDocs(collection(getFirestore(), "users")).then(querySnapshot => {
+        querySnapshot.forEach((doc) => {
+          if (doc.data().id === lastPath) {
+            console.log('user',doc.data(), lastPath)
+            setUserData(doc.data())
+          }
+        });
+      })
+    } else {
+      if (user) {
+      const userId = user?.uid.slice(0, 6)
+      window.location = `/user/${userId}`
+      } else {
+        window.location = `/login`
+      }
     }
-  }, [user])
+  }, [location])
+  // useLayoutEffect(() => {
+  //   if (!user) {
+  //     // navigate('/login')
+  //     window.location = '/login'
+  //   }
+  // }, [user])
   return (
     <div>
       {
-        user === 'loading' || userData === 'loading' || !user || !userData ?
+        user === 'loading' || userData === 'loading' || !userData ?
           <div className='loader'>
             <div className="spinner-border text-primary" role="status">
               <span className="visually-hidden">Loading...</span>
@@ -60,9 +84,14 @@ const User = ({ user, setUser, userData }) => {
               <div className="main__about">
                 <h2>О себе</h2>
                 <p>{userData.about}</p>
-                <div>
-                  {userData.videos.map((item, i) => <iframe key={i} width="160px" height="100px" src={item} title="Video player" frameBorder="0" allow="" allowFullScreen />)}
-                </div>
+                <Swiper slidesPerView={'auto'} spaceBetween={20} freeMode={true} className="mySwiper">
+                  {userData?.videos !== undefined && userData?.videos.length > 0 ? userData.videos.map((item, i) =>
+                    <SwiperSlide>
+                      <iframe key={i} width="160px" height="100px" src={item} title="Video player" frameBorder="0" allow="" allowFullScreen />
+                    </SwiperSlide>)
+                    :
+                    <></>}
+                </Swiper>
               </div>
               <div className="main-interests">
                 <h2>Интересы</h2>

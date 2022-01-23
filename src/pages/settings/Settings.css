@@ -1,6 +1,7 @@
 .settings {
   padding: 0 150px;
 }
+
 .settings__item {
   position: relative;
   margin: 25px;
@@ -53,4 +54,10 @@
 }
 .settings__item_none-cursor::after {
   display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .settings {
+    padding: 0 15px;
+  }
 }

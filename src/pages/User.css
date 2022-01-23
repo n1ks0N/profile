@@ -10,3 +10,9 @@
   color: #E72A72;
   margin: auto;
 }
+
+@media screen and (max-width: 600px) {
+  .btn-user {
+    width: 100%;
+  }
+}

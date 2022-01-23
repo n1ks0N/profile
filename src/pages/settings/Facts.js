@@ -63,6 +63,12 @@ const Facts = ({ user, userData }) => {
       ).then(() => navigate('/user/settings'))
     }
   }
+  useLayoutEffect(() => {
+    if (!user) {
+      // navigate('/login')
+      window.location = '/login'
+    }
+  }, [user])
   return (
     <div className="settings-wrap">
       <SettingsHeader title="Факты" />

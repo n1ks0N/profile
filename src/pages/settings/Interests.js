@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
 import { doc, onSnapshot, getFirestore, setDoc } from "firebase/firestore";
 import Select from 'react-select'
 import SettingsHeader from "../../components/settings/SettingsHeder"
@@ -24,6 +24,12 @@ const Interests = ({ user, userData }) => {
     }, { merge: true }
     ).then(() => navigate('/user/settings'))
   }
+  useLayoutEffect(() => {
+    if (!user) {
+      // navigate('/login')
+      window.location = '/login'
+    }
+  }, [user])
   return (
     <div className="settings-wrap">
       <SettingsHeader title="Интересы" />

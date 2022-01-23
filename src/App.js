@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { Route, Link, Routes, useNavigate } from 'react-router-dom'
 import Main from './pages/Main'
 import Login from './components/auth/Login';
@@ -32,7 +32,7 @@ const App = () => {
 
   let navigate = useNavigate() // for redirects
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     onAuthStateChanged(getAuth(), (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
@@ -58,7 +58,6 @@ const App = () => {
     if (user) {
       navigate('/user')
     } else if (loginModal) {
-      console.log(loginModal)
       navigate('/login')
     } else {
       navigate('/sign')

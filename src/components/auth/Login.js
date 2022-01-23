@@ -1,5 +1,5 @@
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useLayoutEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import Input from '../../elements/Input';
 import listIcon from '../../utils/img/list.svg'
@@ -14,6 +14,7 @@ const Login = ({ user, setUser }) => {
 	const sign = (e) => {
 		e.preventDefault()
 		const { login, pass } = e.target.elements
+		if (login.value.includes('@')) {
 		signInWithEmailAndPassword(getAuth(), login.value, pass.value)
 			.then((userCredential) => {
 				// Signed in 
@@ -25,8 +26,21 @@ const Login = ({ user, setUser }) => {
 				const errorMessage = error.message;
 				console.log(errorCode, errorMessage)
 			});
+		} else {
+			signInWithEmailAndPassword(getAuth(), `${login.value}@tel.com`, pass.value)
+			.then((userCredential) => {
+				// Signed in 
+				const user = userCredential.user;
+				setUser(user)
+			})
+			.catch((error) => {
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				console.log(errorCode, errorMessage)
+			});
+		}
 	}
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (user) {
 			navigate('/user')
 		}
@@ -57,7 +71,7 @@ const Login = ({ user, setUser }) => {
 			</div>
 			<p className='modal-auth__text'>Авторизуясь на сайте, вы принимаете условия<br /><Link to="/privacy">пользовательского соглашения</Link></p>
 			<div className='modal-auth__extra-wrapper'><h5>Еще не зарегистрированы?</h5>
-				<Link to="/sign"><button type='button' className='btn btn-primary btn-width'>Создать аккаунт</button></Link>
+				<Link to="/sign"><button type='button' className='btn btn-app btn-width'>Создать аккаунт</button></Link>
 			</div>
 		</div>
 	);

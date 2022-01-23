@@ -1,5 +1,5 @@
 import { getAuth, createUserWithEmailAndPassword, signInWithPhoneNumber } from 'firebase/auth';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useLayoutEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { doc, setDoc, getFirestore } from "firebase/firestore";
 import Input from '../../elements/Input';
@@ -28,10 +28,14 @@ const Login = ({ user, setUser }) => {
 						phone: '',
 						interests: [],
 						about: '',
-						videos: []
-					});
-					setUser(user)
+						videos: [],
+						facts: [],
+						id: user.uid.slice(0, 6)
+					})
 					document.cookie += 'account=true'
+				}).then(() => {
+					setUser(user)
+					navigate('/user/settings/profile')
 				})
 				.catch((error) => {
 					const errorCode = error.code;
@@ -39,14 +43,39 @@ const Login = ({ user, setUser }) => {
 					console.log(errorCode, errorMessage)
 				});
 		} else {
-			
+			createUserWithEmailAndPassword(getAuth(), `${login.value}@tel.com`, pass.value)
+				.then((userCredential) => {
+					// Signed in 
+					const user = userCredential.user;
+					setDoc(doc(getFirestore(), "users", user.email), {
+						mail: user.email,
+						name: '',
+						surname: '',
+						city: '',
+						phone: '',
+						interests: [],
+						about: '',
+						videos: [],
+						facts: [],
+						id: user.uid.slice(0, 6)
+					});
+					document.cookie += 'account=true'
+				}).then(() => {
+					setUser(user)
+					navigate('/user/settings/profile')
+				})
+				.catch((error) => {
+					const errorCode = error.code;
+					const errorMessage = error.message;
+					console.log(errorCode, errorMessage)
+				});
 		}
 	}
-	useEffect(() => {
-		if (user) {
-			navigate('/user/settings/profile')
-		}
-	}, [user])
+	// useEffect(() => {
+	// 	if (user) {
+	// 		navigate('/user')
+	// 	}
+	// }, [user])
 	useEffect(() => {
 		const onClick = e => rootEl.current.contains(e.target) || navigate('/');
 		document.addEventListener('click', onClick);
@@ -73,7 +102,7 @@ const Login = ({ user, setUser }) => {
 			</div>
 			<p className='modal-auth__text'>Авторизуясь на сайте, вы принимаете условия<br /><Link to="/privacy">пользовательского соглашения</Link></p>
 			<div className='modal-auth__extra-wrapper'><h5>Уже есть аккаунт?</h5>
-				<Link to="/login"><button type='button' className='btn btn-primary btn-width'>Войти</button></Link>
+				<Link to="/login"><button type='button' className='btn btn-app btn-width'>Войти</button></Link>
 			</div>
 		</div>
 	);

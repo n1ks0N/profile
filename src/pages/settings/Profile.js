@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useLayoutEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Input from '../../elements/Input'
 import { doc, setDoc, getFirestore } from "firebase/firestore"; 
@@ -16,8 +16,13 @@ const Profile = ({ user, userData }) => {
       phone: phone.value.trim(),
       mail: mail.value.trim()
     }, { merge: true }).then(() => navigate('/user/settings'));
-
   }
+  useLayoutEffect(() => {
+    if (!user) {
+      // navigate('/login')
+      window.location = '/login'
+    }
+  }, [user])
   return (
     <div className='settings-wrap'>
       <SettingsHeader title="Личные данные" />

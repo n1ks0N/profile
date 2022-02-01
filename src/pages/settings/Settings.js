@@ -1,5 +1,6 @@
-import { useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
+import { doc, setDoc, getFirestore } from "firebase/firestore"; 
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import avatarIcon from '../../utils/img/avatar.svg'
 import profileIcon from '../../utils/img/profile.svg'
@@ -7,6 +8,7 @@ import locationIcon from '../../utils/img/location.svg'
 import plusIcon from '../../utils/img/plus.svg'
 import cameraIcon from '../../utils/img/camera.svg'
 import './Settings.css'
+import SettingsHeader from '../../components/settings/SettingsHeder';
 
 const Settings = ({ user, userData }) => {
   let navigate = useNavigate()
@@ -17,33 +19,39 @@ const Settings = ({ user, userData }) => {
     document.querySelector('#upload').click()
   }
   const fileReader = (e) => {
-    console.log(e.target.files[0])
     let reader = new FileReader();
     const file = e.target.files[0]
     reader.readAsDataURL(file);
     reader.onload = () => {
       const storage = getStorage();
-      const avatarRef = ref(storage, `avatars/${user.email}.${file.name.split('.').pop()}`);
-      uploadBytes(avatarRef, reader.result).then((snapshot) => {
-        console.log('Uploaded a blob or file!');
+      const imageName = user.uid.slice(0, 6)
+      const avatarRef = ref(storage, imageName);
+      console.log(reader.result)
+      uploadBytes(avatarRef, file).then((snapshot) => {
+        setDoc(doc(getFirestore(), "users", user.email), {
+          avatar: `https://firebasestorage.googleapis.com/v0/b/profile-2e8aa.appspot.com/o/${imageName}?alt=media&token=c361b04d-62ea-4037-b820-204c37dd75aa`
+        }, { merge: true }).then(() => {
+          window.location.reload()
+        })
       });
     };
   }
   useLayoutEffect(() => {
     if (!user) {
       // navigate('/login')
-      window.location = '/login'
+      // window.location = '/login'
     }
   }, [user])
   return (
     <div className='settings'>
       {user && <>
+      <SettingsHeader title="Редактирование профиля" link="/user" />
       <div className="main__info">
         <div className='avatar-wrap' onClick={changeAvatar}>
           <div className='avatar-wrap__bg'>
             <img src={cameraIcon} />
           </div>
-          <img src={avatarIcon} />
+          <img src={userData?.avatar || avatarIcon} className='avatar' />
 
           <input type="file" accept='image/*' name="img" id="upload" style={{ display: 'none' }} onChange={fileReader} />
         </div>

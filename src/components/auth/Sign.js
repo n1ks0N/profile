@@ -30,18 +30,19 @@ const Login = ({ user, setUser }) => {
 						about: '',
 						videos: [],
 						facts: [],
-						id: user.uid.slice(0, 6)
+						id: user.uid.slice(0, 6),
+						avatar: 'https://firebasestorage.googleapis.com/v0/b/profile-2e8aa.appspot.com/o/profile.svg?alt=media&token=c361b04d-62ea-4037-b820-204c37dd75aa'
+					}).then(() => {
+						setUser(user)
+						navigate('/user/settings/profile')
 					})
 					document.cookie += 'account=true'
-				}).then(() => {
-					setUser(user)
-					navigate('/user/settings/profile')
 				})
 				.catch((error) => {
 					const errorCode = error.code;
 					const errorMessage = error.message;
 					console.log(errorCode, errorMessage)
-				});
+				})
 		} else {
 			createUserWithEmailAndPassword(getAuth(), `${login.value}@tel.com`, pass.value)
 				.then((userCredential) => {
@@ -57,25 +58,26 @@ const Login = ({ user, setUser }) => {
 						about: '',
 						videos: [],
 						facts: [],
-						id: user.uid.slice(0, 6)
-					});
+						id: user.uid.slice(0, 6),
+						avatar: 'https://firebasestorage.googleapis.com/v0/b/profile-2e8aa.appspot.com/o/profile.svg?alt=media&token=c361b04d-62ea-4037-b820-204c37dd75aa'
+					}).then(() => {
+						setUser(user)
+						navigate('/user/settings/profile')
+					})
 					document.cookie += 'account=true'
-				}).then(() => {
-					setUser(user)
-					navigate('/user/settings/profile')
 				})
 				.catch((error) => {
 					const errorCode = error.code;
 					const errorMessage = error.message;
 					console.log(errorCode, errorMessage)
-				});
+				})
 		}
 	}
-	// useEffect(() => {
-	// 	if (user) {
-	// 		navigate('/user')
-	// 	}
-	// }, [user])
+	useLayoutEffect(() => {
+		if (user && user !== 'loading') {
+			window.location = '/user'
+		}
+	}, [])
 	useEffect(() => {
 		const onClick = e => rootEl.current.contains(e.target) || navigate('/');
 		document.addEventListener('click', onClick);
@@ -102,7 +104,9 @@ const Login = ({ user, setUser }) => {
 			</div>
 			<p className='modal-auth__text'>Авторизуясь на сайте, вы принимаете условия<br /><Link to="/privacy">пользовательского соглашения</Link></p>
 			<div className='modal-auth__extra-wrapper'><h5>Уже есть аккаунт?</h5>
-				<Link to="/login"><button type='button' className='btn btn-app btn-width'>Войти</button></Link>
+				<div className='btn-app-wrap'>
+					<Link to="/login"><button type='button' className='btn btn-app btn-width'>Войти</button></Link>
+				</div>
 			</div>
 		</div>
 	);

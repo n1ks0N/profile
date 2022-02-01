@@ -4,8 +4,11 @@
 
 .settings__item {
   position: relative;
-  margin: 25px;
+  margin: 25px 0;
   cursor: pointer;
+  border-bottom: 1px solid #DEDEDE;
+  padding-bottom: 16px;
+  padding: 25px;
 }
 .settings__item::after {
   position: absolute;
@@ -58,6 +61,9 @@
 
 @media screen and (max-width: 600px) {
   .settings {
+    padding: 0 15px;
+  }
+  .settings-wrap {
     padding: 0 15px;
   }
 }

@@ -1,5 +1,9 @@
 .settings__wrapper {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  height: 56px;
+  border-bottom: 1px solid #DEDEDE;
+  margin-bottom: 17px;
 }

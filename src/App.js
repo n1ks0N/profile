@@ -18,6 +18,7 @@ import About from './pages/settings/About';
 import Facts from './pages/settings/Facts';
 import Interests from './pages/settings/Interests';
 import Loader from './components/loader/Loader'
+import './utils/css/animations.css'
 
 const App = () => {
   // Main data about user for login or logout status
@@ -65,21 +66,25 @@ const App = () => {
   }
   return (
     <div className="app">
-      <header className="header">
-        <div>
+      <Routes>
+        <Route path="/user/*" element={<></>} />
+        <Route path="*" element={
+        <header className="header">
+          <div>
 
-        </div>
-        <div>
+          </div>
+          <div>
             <Link to="/"><img src={logoImage} /></Link>
-        </div>
-        <button type='button' className='btn btn-link' onClick={openAuthModal}>
-          {user !== 'loading' && userData !== 'loading' && user && userData ?
-            <img src={avatarImage} className='header__avatar' />
-            : 
-            <img src={profileIcon} />
-          }
-        </button>
-      </header>
+          </div>
+          <button type='button' className='btn btn-link' onClick={openAuthModal}>
+            {user !== 'loading' && userData !== 'loading' && user && userData ?
+              <img src={userData?.avatar || avatarImage} className='header__avatar' />
+              :
+              <img src={profileIcon} />
+            }
+          </button>
+        </header>} />
+      </Routes>
       <main>
         <Routes>
           <Route path="/login" element={<Login user={user} setUser={setUser} />} />
@@ -92,11 +97,11 @@ const App = () => {
             <Route exact path="/user/settings/facts/*" element={<Facts user={user} userData={userData} />} />
             <Route exact path="/user/settings/interests/*" element={<Interests user={user} userData={userData} />} />
             <Route exact path="/user/settings/*" element={<Settings user={user} userData={userData} />} />
-            <Route path="/user/*" element={<User user={user} setUser={setUser} userData={userData} />} />
+            <Route path="/user/*" element={<User user={user} setUser={setUser} currentUserData={userData} setCurrentUserData={setUserData} />} />
             <Route path="*" element={<Main />} />
           </Routes>
           :
-            <Loader />
+          <Loader />
         }
         {/* <Route path="*" element={<h1>404</h1>} /> */}
       </main>

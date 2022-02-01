@@ -58,11 +58,29 @@
 .main__info__name {
   font-weight: 700;
 }
+.main-wrap {
+  padding: 0 16px;
+}
+
+.modal-invite {
+  background: #5B2AE7;
+box-shadow: 0px -4px 16px rgba(0, 0, 0, 0.1), 0px -4px 60px rgba(91, 42, 231, 0.1);
+border-radius: 8px 8px 0px 0px;
+padding: 16px;
+}
+.modal-invite__title, .modal-invite__text {
+  color: #fff;
+}
+
+.btn-app_white {
+  background: #FFFFFF !important;
+  color: #5B2AE7 !important;
+}
 
 @media screen and (max-width: 800px) {
   .main {
     width: 100%;
-    padding: 15px;
+    padding: 0;
   }
   .main__info {
     justify-content: flex-start;

@@ -16,47 +16,49 @@ import "swiper/css/pagination"
 import SwiperCore, {
   FreeMode, Pagination
 } from 'swiper';
+import SettingsHeader from '../components/settings/SettingsHeder';
 SwiperCore.use([FreeMode, Pagination]);
 
-const User = ({ user, setUser }) => {
+const User = ({ user, setUser, currentUserData, setCurrentUserData }) => {
+  const userId = user ? user.uid.slice(0, 6) : false
   const [userData, setUserData] = useState(false)
   let navigate = useNavigate()
   let location = useLocation()
   const logout = () => {
     signOut(getAuth()).then(() => {
       setUser(false)
-      navigate('/')
+      setCurrentUserData(false)
     }).catch((error) => {
       console.log(error)
-    });
+    }).then(() => navigate('/'))
   }
   useLayoutEffect(() => {
     const paths = location.pathname.split('/')
     const lastPath = paths.pop()
-    if (lastPath !== 'user' && !paths.includes('/settings')) {
+    if (user && userId === lastPath) {
+      setUserData(currentUserData)
+    } else if (lastPath !== 'user' && !paths.includes('/settings')) {
+      let find = false
       getDocs(collection(getFirestore(), "users")).then(querySnapshot => {
         querySnapshot.forEach((doc) => {
           if (doc.data().id === lastPath) {
-            console.log('user',doc.data(), lastPath)
             setUserData(doc.data())
+            find = true
           }
         });
+      }).then(() => {
+        if (!find) {
+          setUserData(false)
+        }
       })
+    } else if (user) {
+      window.history.pushState({}, '', `/user/${userId}`)
+      setUserData(currentUserData)
+      console.log('CURRENT USER', currentUserData)
     } else {
-      if (user) {
-      const userId = user?.uid.slice(0, 6)
-      window.location = `/user/${userId}`
-      } else {
-        window.location = `/login`
-      }
+      window.location = `/login`
     }
-  }, [location])
-  // useLayoutEffect(() => {
-  //   if (!user) {
-  //     // navigate('/login')
-  //     window.location = '/login'
-  //   }
-  // }, [user])
+  }, [location, currentUserData])
   return (
     <div>
       {
@@ -67,11 +69,12 @@ const User = ({ user, setUser }) => {
             </div>
           </div>
           :
-          <>
+          <div className='main-wrap'>
+            <SettingsHeader title="Мой профиль" link="/" />
             <div className="main">
               <div className="main__info">
                 <div>
-                  <img src={avatarIcon} />
+                  <img src={userData?.avatar || avatarIcon} className='avatar' />
                 </div>
                 <div className='main__info__text-wrapper'>
                   <h3 className='main__info__name'>{userData.name} {userData.surname}</h3>
@@ -125,7 +128,7 @@ const User = ({ user, setUser }) => {
               </div>
             </div>
             <button type='button' className='btn btn-logout width-100' onClick={logout}>Выйти из профиля</button>
-          </>
+          </div>
       }
     </div>
   );

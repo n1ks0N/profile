@@ -3,7 +3,7 @@
   color: #1A1C27;
 }
 
-p {
+p, h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
 
@@ -26,6 +26,7 @@ header {
 .header__avatar {
   width: 40px;
   height: 40px;
+  border-radius: 100px;
 }
 
 .btn-app {
@@ -45,8 +46,9 @@ header {
   background: #551df0;
 }
 
-.btn-width {
-  width: 95vw;
+.btn-app-wrap {
+  width: 100%;
+  margin-top: 15px;
 }
 
 .width-100 {
@@ -86,4 +88,10 @@ header {
   width: 100px;
   height: 100px;
   object-fit: cover;
+}
+
+.avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 100px;
 }

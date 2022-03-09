@@ -9,7 +9,7 @@ import 'firebase/storage'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAfyPmVZdoQCY70bxVGjeKTXJZSVtoEP3Q",
+  apiKey: "",
   authDomain: "profile-2e8aa.firebaseapp.com",
   projectId: "profile-2e8aa",
   storageBucket: "profile-2e8aa.appspot.com",
